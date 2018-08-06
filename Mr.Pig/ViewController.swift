@@ -17,6 +17,11 @@ class ViewController: UIViewController {
     var scnView: SCNView!
     var gameScene: SCNScene!
     var splashScene: SCNScene!
+    var pigNode: SCNNode!
+    var cameraNode: SCNNode!
+    var cameraFollowNode: SCNNode!
+    var lightFollowNode: SCNNode!
+    var trafficNode: SCNNode!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +56,15 @@ class ViewController: UIViewController {
     }
     
     func setupNodes() {
+        pigNode = gameScene.rootNode.childNode(withName: "MrPig", recursively: true)!
+        cameraNode = gameScene.rootNode.childNode(withName: "camera", recursively: true)!
+        cameraNode.addChildNode(game.hudNode)
+        
+        cameraFollowNode = gameScene.rootNode.childNode(withName: "FollowCamera", recursively: true)!
+        lightFollowNode = gameScene.rootNode.childNode(withName: "FollowLight", recursively: true)!
+        lightFollowNode.position = cameraFollowNode.position
+        
+        trafficNode = gameScene.rootNode.childNode(withName: "Traffic", recursively: true)!
     }
     
     func setupActions() {
@@ -67,7 +81,7 @@ class ViewController: UIViewController {
     
     func startGame() {
         splashScene.isPaused = true
-        
+           
         let transition = SKTransition.doorsOpenVertical(withDuration: 1.0)
         
         scnView.present(gameScene, with: transition, incomingPointOfView: nil, completionHandler: {
